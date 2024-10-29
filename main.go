@@ -23,8 +23,10 @@ func main() {
 	var userName string
 	var userTickets int
 	
-	userTickets = 2
-	userName = "Rick"
+	fmt.Println("Enter the username: ")
+	fmt.Scan(&userName)
+	fmt.Println("Enter the number of tickets: ")
+	fmt.Scan(&userTickets)
 	fmt.Printf("user %v booked %v tickets\n", userName,userTickets)
 	
 }
