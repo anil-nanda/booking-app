@@ -5,13 +5,20 @@ import (
  	"strings"
 )
 
-func greetUsers(confName string, remainingTickets int) {
-	fmt.Println("Welocome to the ", confName)
+// package level variables, it doesn't support := syntax
+const conferenceTickets = 50
+var conferenceName = "Go conference"
+var remainingTickets = 50
+var bookings = []string{}
+
+//no arguments are passed as the variables in function are refered from package level
+func greetUsers() {
+	fmt.Println("Welocome to the ", conferenceName)
 	fmt.Println("We have",remainingTickets, "remaining")
 }
 
 // last parameter specifies the type of return value
-func getFirstName(bookings []string) []string {
+func getFirstName() []string {
 	firstNames := []string{}
 			// _ is used to mention an unused variable as index is not reffered in the loop 
 			for _, booking := range bookings {
@@ -21,7 +28,7 @@ func getFirstName(bookings []string) []string {
 			return firstNames
 	}
 
-func validateUserInputs(firstName string, lastName string, email string, userTickets int, remainingTickets int, city string) (bool, bool, bool,bool) {
+func validateUserInputs(firstName string, lastName string, email string, userTickets int, city string) (bool, bool, bool,bool) {
 	isValidName := len(firstName) >=2 && len(lastName) >=2
 
 	isValidEmail := strings.Contains(email, "@")
@@ -55,7 +62,7 @@ func getUserInput() (string, string, string, string, int) {
 	return firstName, lastName, email, city, userTickets
 }
 
-func bookTicket(bookings []string, firstName string, lastName string, email string, remainingTickets int, userTickets int) {
+func bookTicket( firstName string, lastName string, email string, userTickets int) {
 	bookings  = append(bookings, firstName + " "+ lastName)	
 	remainingTickets = remainingTickets - userTickets
 	fmt.Printf("%v tickets remaining\n", remainingTickets)
@@ -63,22 +70,14 @@ func bookTicket(bookings []string, firstName string, lastName string, email stri
 }
 	
 func main() {
-	const conferenceTickets = 50
-	conferenceName := "Go conference"
-	
-	remainingTickets := 50
 
-	bookings := []string{}
-
-	greetUsers(conferenceName, remainingTickets)
+	greetUsers()
 	
-	
-
 	for {
 
 		firstName, lastName, email, city, userTickets := getUserInput()
 
-		isValidName, isValidEmail, isValidTickets, isValidCity := validateUserInputs(firstName, lastName, email, userTickets, remainingTickets, city)
+		isValidName, isValidEmail, isValidTickets, isValidCity := validateUserInputs(firstName, lastName, email, userTickets, city)
 		
 		if isValidName && isValidEmail && isValidTickets && isValidCity {
 			
@@ -94,11 +93,11 @@ func main() {
 					fmt.Println(timeZone)
 			}
 			
-			bookTicket(bookings, firstName, lastName, email, remainingTickets, userTickets)
+			bookTicket( firstName, lastName, email, userTickets)
 			//fmt.Printf("First element of slice is %v\n", bookings[0])
 			//fmt.Printf("Type of slice is %T\n", bookings)
 
-			firstNames := getFirstName(bookings)
+			firstNames := getFirstName()
 
 			fmt.Printf("First names of the booking are %v\n", firstNames)
 
