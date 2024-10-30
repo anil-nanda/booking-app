@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
- 	"strings"
 	"booking-app/helper"
+	"strconv"
 )
 
 // package level variables, it doesn't support := syntax
 const conferenceTickets = 50
 var conferenceName = "Go conference"
 var remainingTickets = 50
-var bookings = []string{}
+var bookings = make([]map[string]string, 0)
 
 //no arguments are passed as the variables in function are refered from package level
 func greetUsers() {
@@ -23,8 +23,7 @@ func getFirstName() []string {
 	firstNames := []string{}
 			// _ is used to mention an unused variable as index is not reffered in the loop 
 			for _, booking := range bookings {
-				names := strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
+				firstNames = append(firstNames, booking["firstName"])
 			}
 			return firstNames
 	}
@@ -52,7 +51,16 @@ func getUserInput() (string, string, string, string, int) {
 }
 
 func bookTicket( firstName string, lastName string, email string, userTickets int) {
-	bookings  = append(bookings, firstName + " "+ lastName)	
+	// create a map for storing all the user details
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["numberOfTickets"] = strconv.FormatInt(int64(userTickets), 10)
+
+	fmt.Printf("%v\n",userData)
+
+	bookings  = append(bookings, userData)	
 	remainingTickets = remainingTickets - userTickets
 	fmt.Printf("%v tickets remaining\n", remainingTickets)
 	fmt.Printf("user %v %v booked %v tickets. confirmation mail send to %v\n", firstName, lastName,userTickets, email)
