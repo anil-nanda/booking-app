@@ -4,6 +4,21 @@ import (
 	"fmt"
  	"strings"
 )
+
+func greetUsers(confName string, remainingTickets int) {
+	fmt.Println("Welocome to the ", confName)
+	fmt.Println("We have",remainingTickets, "remaining")
+}
+
+func printFirstName(bookings []string) {
+	firstNames := []string{}
+			// _ is used to mention an unused variable as index is not reffered in the loop 
+			for _, booking := range bookings {
+				names := strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+			fmt.Printf("First names of the booking are %v\n", firstNames)
+}
 	
 func main() {
 	const conferenceTickets = 50
@@ -12,9 +27,10 @@ func main() {
 	remainingTickets := 50
 
 	bookings := []string{}
+
+	greetUsers(conferenceName, remainingTickets)
 	
-	fmt.Println("Welocome to the", conferenceName)
-	fmt.Println("We have",remainingTickets, "remaining")
+	
 
 	for {
 		
@@ -68,13 +84,7 @@ func main() {
 			fmt.Printf("First element of slice is %v\n", bookings[0])
 			//fmt.Printf("Type of slice is %T\n", bookings)
 
-			firstNames := []string{}
-			// _ is used to mention an unused variable as index is not reffered in the loop 
-			for _, booking := range bookings {
-				names := strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
-			}
-			fmt.Printf("First names of the booking are %v\n", firstNames)
+			printFirstName(bookings)
 			fmt.Printf("Whole booking list %v\n",bookings)
 			fmt.Printf("Number of unique bookings is %v\n", len(bookings))
 
