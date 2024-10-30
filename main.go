@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
  	"strings"
+	"booking-app/helper"
 )
 
 // package level variables, it doesn't support := syntax
@@ -27,18 +28,6 @@ func getFirstName() []string {
 			}
 			return firstNames
 	}
-
-func validateUserInputs(firstName string, lastName string, email string, userTickets int, city string) (bool, bool, bool,bool) {
-	isValidName := len(firstName) >=2 && len(lastName) >=2
-
-	isValidEmail := strings.Contains(email, "@")
-
-	isValidTickets := userTickets > 0 && userTickets <= remainingTickets
-
-	isValidCity := city == "Singapore" || city == "London"
-
-	return isValidName, isValidEmail, isValidTickets, isValidCity
-}
 
 func getUserInput() (string, string, string, string, int) {
 	
@@ -77,7 +66,7 @@ func main() {
 
 		firstName, lastName, email, city, userTickets := getUserInput()
 
-		isValidName, isValidEmail, isValidTickets, isValidCity := validateUserInputs(firstName, lastName, email, userTickets, city)
+		isValidName, isValidEmail, isValidTickets, isValidCity := helper.ValidateUserInputs(firstName, lastName, email, userTickets, city, remainingTickets)
 		
 		if isValidName && isValidEmail && isValidTickets && isValidCity {
 			
@@ -112,16 +101,16 @@ func main() {
 			}
 		} else {
 			if !isValidName {
-				fmt.Printf("Entered name is not valid")
+				fmt.Printf("Entered name is not valid\n")
 			}
 			if !isValidEmail {
-				fmt.Printf("Email is not valid")
+				fmt.Printf("Email is not valid\n")
 			}
 			if !isValidCity {
-				fmt.Printf("City is not valid")
+				fmt.Printf("City is not valid\n")
 			}
 			if !isValidTickets {
-				fmt.Printf("Tickets is not valid")
+				fmt.Printf("Tickets is not valid\n")
 			}
 		}
 
