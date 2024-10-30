@@ -10,14 +10,56 @@ func greetUsers(confName string, remainingTickets int) {
 	fmt.Println("We have",remainingTickets, "remaining")
 }
 
-func printFirstName(bookings []string) {
+// last parameter specifies the type of return value
+func getFirstName(bookings []string) []string {
 	firstNames := []string{}
 			// _ is used to mention an unused variable as index is not reffered in the loop 
 			for _, booking := range bookings {
 				names := strings.Fields(booking)
 				firstNames = append(firstNames, names[0])
 			}
-			fmt.Printf("First names of the booking are %v\n", firstNames)
+			return firstNames
+	}
+
+func validateUserInputs(firstName string, lastName string, email string, userTickets int, remainingTickets int, city string) (bool, bool, bool,bool) {
+	isValidName := len(firstName) >=2 && len(lastName) >=2
+
+	isValidEmail := strings.Contains(email, "@")
+
+	isValidTickets := userTickets > 0 && userTickets <= remainingTickets
+
+	isValidCity := city == "Singapore" || city == "London"
+
+	return isValidName, isValidEmail, isValidTickets, isValidCity
+}
+
+func getUserInput() (string, string, string, string, int) {
+	
+	var firstName string
+	var lastName string
+	var email string
+	var userTickets int
+	var city string
+
+	fmt.Println("Enter the first name: ")
+	fmt.Scan(&firstName)
+	fmt.Println("Enter the last name: ")
+	fmt.Scan(&lastName)
+	fmt.Println("Enter the email: ")
+	fmt.Scan(&email)
+	fmt.Println("Enter the city: ")
+	fmt.Scan(&city)
+	fmt.Println("Enter the number of tickets: ")
+	fmt.Scan(&userTickets)
+
+	return firstName, lastName, email, city, userTickets
+}
+
+func bookTicket(bookings []string, firstName string, lastName string, email string, remainingTickets int, userTickets int) {
+	bookings  = append(bookings, firstName + " "+ lastName)	
+	remainingTickets = remainingTickets - userTickets
+	fmt.Printf("%v tickets remaining\n", remainingTickets)
+	fmt.Printf("user %v %v booked %v tickets. confirmation mail send to %v\n", firstName, lastName,userTickets, email)
 }
 	
 func main() {
@@ -33,32 +75,10 @@ func main() {
 	
 
 	for {
-		
-		var firstName string
-		var lastName string
-		var email string
-		var userTickets int
-		var city string
-		
-		fmt.Println("Enter the first name: ")
-		fmt.Scan(&firstName)
-		fmt.Println("Enter the last name: ")
-		fmt.Scan(&lastName)
-		fmt.Println("Enter the email: ")
-		fmt.Scan(&email)
-		fmt.Println("Enter the city: ")
-		fmt.Scan(&city)
-		fmt.Println("Enter the number of tickets: ")
-		fmt.Scan(&userTickets)
 
-		isValidName := len(firstName) >=2 && len(lastName) >=2
+		firstName, lastName, email, city, userTickets := getUserInput()
 
-		isValidEmail := strings.Contains(email, "@")
-
-		isValidTickets := userTickets > 0 && userTickets <= remainingTickets
-
-		isValidCity := city == "Singapore" || city == "London"
-	
+		isValidName, isValidEmail, isValidTickets, isValidCity := validateUserInputs(firstName, lastName, email, userTickets, remainingTickets, city)
 		
 		if isValidName && isValidEmail && isValidTickets && isValidCity {
 			
@@ -73,20 +93,17 @@ func main() {
 					timeZone := "GMT"
 					fmt.Println(timeZone)
 			}
-			fmt.Printf("user %v %v booked %v tickets. confirmation mail send to %v\n", firstName, lastName,userTickets, email)
-		
-			remainingTickets = remainingTickets - userTickets
-
-			fmt.Printf("%v tickets remaining\n", remainingTickets)
-
-			bookings  = append(bookings, firstName + " "+ lastName)
-		
-			fmt.Printf("First element of slice is %v\n", bookings[0])
+			
+			bookTicket(bookings, firstName, lastName, email, remainingTickets, userTickets)
+			//fmt.Printf("First element of slice is %v\n", bookings[0])
 			//fmt.Printf("Type of slice is %T\n", bookings)
 
-			printFirstName(bookings)
-			fmt.Printf("Whole booking list %v\n",bookings)
-			fmt.Printf("Number of unique bookings is %v\n", len(bookings))
+			firstNames := getFirstName(bookings)
+
+			fmt.Printf("First names of the booking are %v\n", firstNames)
+
+			//fmt.Printf("Whole booking list %v\n",bookings)
+			//fmt.Printf("Number of unique bookings is %v\n", len(bookings))
 
 			noTicketsRemaining := remainingTickets == 0
 
