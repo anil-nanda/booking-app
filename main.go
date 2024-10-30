@@ -31,6 +31,12 @@ func main() {
 		fmt.Scan(&email)
 		fmt.Println("Enter the number of tickets: ")
 		fmt.Scan(&userTickets)
+		
+		if userTickets > remainingTickets {
+			fmt.Printf("we only have %v tickets remaining", remainingTickets)
+			continue
+		}
+
 		fmt.Printf("user %v %v booked %v tickets. confirmation mail send to %v\n", firstName, lastName,userTickets, email)
 		
 		remainingTickets = remainingTickets - userTickets
@@ -51,6 +57,13 @@ func main() {
 		fmt.Printf("First names of the booking are %v\n", firstNames)
 		fmt.Printf("Whole booking list %v\n",bookings)
 		fmt.Printf("Number of unique bookings is %v\n", len(bookings))
+
+		noTicketsRemaining := remainingTickets == 0
+
+		if noTicketsRemaining {
+			fmt.Printf("All tickets are sold out")
+			break
+		}
 	}
 	
 }
