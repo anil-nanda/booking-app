@@ -22,6 +22,7 @@ func main() {
 		var lastName string
 		var email string
 		var userTickets int
+		var city string
 		
 		fmt.Println("Enter the first name: ")
 		fmt.Scan(&firstName)
@@ -36,13 +37,26 @@ func main() {
 
 		isValidName := len(firstName) >=2 && len(lastName) >=2
 
-		isValidEmail := strings.Containts(email, "@")
+		isValidEmail := strings.Contains(email, "@")
 
 		isValidTickets := userTickets > 0 && userTickets <= remainingTickets
 
-		isValidCity := city == 'Singapore' || city == 'London'
+		isValidCity := city == "Singapore" || city == "London"
+	
 		
 		if isValidName && isValidEmail && isValidTickets && isValidCity {
+			
+			switch city {
+				case "London", "Manchester":
+					timeZone := "UTC"
+					fmt.Println(timeZone)
+				case "Singapore":
+					timeZone := "SGT"
+					fmt.Println(timeZone)
+				default:
+					timeZone := "GMT"
+					fmt.Println(timeZone)
+			}
 			fmt.Printf("user %v %v booked %v tickets. confirmation mail send to %v\n", firstName, lastName,userTickets, email)
 		
 			remainingTickets = remainingTickets - userTickets
