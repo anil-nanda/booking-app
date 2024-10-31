@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"booking-app/helper"
 	"strconv"
+	"time"
+	"sync"
 )
 
 // package level variables, it doesn't support := syntax
@@ -11,6 +13,16 @@ const conferenceTickets = 50
 var conferenceName = "Go conference"
 var remainingTickets = 50
 var bookings = make([]map[string]string, 0)
+// var bookings = make([]userData, 0)
+
+// define a struct with custom datatypes
+//type userData struct {
+//	firstName string
+//	lastName string
+//	email string
+//	city string
+//	numberOfTickets int
+//}
 
 //no arguments are passed as the variables in function are refered from package level
 func greetUsers() {
@@ -24,6 +36,8 @@ func getFirstName() []string {
 			// _ is used to mention an unused variable as index is not reffered in the loop 
 			for _, booking := range bookings {
 				firstNames = append(firstNames, booking["firstName"])
+				// when using struct
+				// firstNames = append(firstNames, booking.firstName)
 			}
 			return firstNames
 	}
@@ -58,6 +72,15 @@ func bookTicket( firstName string, lastName string, email string, userTickets in
 	userData["email"] = email
 	userData["numberOfTickets"] = strconv.FormatInt(int64(userTickets), 10)
 
+	// when userData struct is used
+	// var userData = userData {
+		// firstName: firstName,
+		//lastName: lastName,
+		//email: email,
+		//city: city,
+		//numberOfTickets: numberOfTickets
+	//}
+
 	fmt.Printf("%v\n",userData)
 
 	bookings  = append(bookings, userData)	
@@ -65,12 +88,14 @@ func bookTicket( firstName string, lastName string, email string, userTickets in
 	fmt.Printf("%v tickets remaining\n", remainingTickets)
 	fmt.Printf("user %v %v booked %v tickets. confirmation mail send to %v\n", firstName, lastName,userTickets, email)
 }
+
+var wg = sync.WaitGroup{}
 	
 func main() {
 
 	greetUsers()
 	
-	for {
+	//for {
 
 		firstName, lastName, email, city, userTickets := getUserInput()
 
@@ -93,6 +118,12 @@ func main() {
 			bookTicket( firstName, lastName, email, userTickets)
 			//fmt.Printf("First element of slice is %v\n", bookings[0])
 			//fmt.Printf("Type of slice is %T\n", bookings)
+			
+			// add the number of functions that are added as async
+			wg.Add(1)
+
+			// keyword go is used to specify to run the code on separate thread
+			go sendTickets(userTickets, firstName, lastName, email)
 
 			firstNames := getFirstName()
 
@@ -105,7 +136,7 @@ func main() {
 
 			if noTicketsRemaining {
 				fmt.Printf("All tickets are sold out")
-				break
+				//break
 			}
 		} else {
 			if !isValidName {
@@ -123,6 +154,19 @@ func main() {
 		}
 
 		
-	}
+	//}
+
+	// wait to exit until the waitgroup count is 0
+	wg.Wait()
 	
+}
+
+
+func sendTickets(userTickets int, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v ", userTickets, firstName, lastName)
+	fmt.Println("####################")
+	fmt.Printf("Sending ticket %v to email address %v\n", ticket, email)
+	fmt.Println("####################")
+	wg.Done()
 }
